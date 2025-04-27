@@ -168,27 +168,12 @@ document.getElementById('editTaskForm').addEventListener('submit', async (e) => 
 
 // ------- delete task --------//
 async function deleteTask(taskId) {
-  // SweetAlert se confirm karo
-  const confirmDelete = await Swal.fire({
-    title: 'Kya aap sure hain?',
-    text: "Ye task permanently delete ho jayega!",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#bc5dcf',
-    cancelButtonColor: '#6c757d',
-    confirmButtonText: 'Haan, delete karo',
-    cancelButtonText: 'Nahi, cancel karo'
-  });
+  try {
 
-  if (confirmDelete.isConfirmed) {
-    try {
-      // Firestore se task delete karna
-      await deleteDoc(doc(db, "tasks", taskId));
-      Swal.fire('Deleted!', 'Task successfully delete ho gaya.', 'success');
-    } catch (err) {
-      Swal.fire('Error!', 'Task delete nahi ho saka.', 'error');
-    }
+    
+    await deleteDoc(doc(db, "tasks", taskId));
+    console.log("Task deleted:", taskId);
+  } catch (err) {
+    console.error("Delete failed:", err);
   }
 }
-
-// Ye function delete button ke saath call ho sakta hai
