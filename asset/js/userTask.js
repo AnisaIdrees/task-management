@@ -8,7 +8,8 @@ import {
   setDoc,
   Timestamp,
   deleteDoc,
-  onSnapshot,updateDoc,
+  onSnapshot,
+  updateDoc,
   query,
 } from "./firebaseConfig.js";
 
@@ -22,7 +23,6 @@ const createTaks = async (e) => {
   console.log(title, description, assign);
 
   try {
-    // Reference to 'tasks' collection
     const tasksCollection = collection(db, "tasks");
 
     // Add task to Firestore
@@ -30,7 +30,8 @@ const createTaks = async (e) => {
       title,
       description,
       assign,
-      createdAt: new Date(), // Adding timestamp
+      userId: auth.currentUser.uid,
+      createdAt: new Date(),
     });
 
     // On successful addition
@@ -42,9 +43,7 @@ const createTaks = async (e) => {
 
     document.getElementById("task-form").reset();
     window.location.href = "/index.html"; // redirection
-
   } catch (error) {
-    // Catch any errors and log them
     console.error("Error adding task: ", error);
     alert("Error adding task. Please try again.");
   }
@@ -54,74 +53,122 @@ document.getElementById("task-form")?.addEventListener("submit", createTaks);
 
 
 
+
+
+
+
+
+
+
+
+
+
 // ----------------------------- fetch data ------------------------------//
-let taskContainer = document.getElementById('task-container');
+let taskContainer = document.getElementById("task-container");
+let dotSpinner = document.querySelector('.dot-spinner');
+function showLoader() {
+  dotSpinner.style.visibility = 'visible';
+}
 
-let fetchTask = async ()=>{
+function hideLoader() {
+  dotSpinner.style.visibility = 'hidden';
+}
 
+let fetchTask = async () => {
+  showLoader();  
   try {
-    
-    const tasksQuery = query(
-      collection(db, "tasks"),
-    );
+    const tasksQuery = query(collection(db, "tasks"));
+
     onSnapshot(tasksQuery, (querySnapshot) => {
       taskContainer.innerHTML = "";
-      // if (isFirstTimeLoad) {
-      //   taskContainer.innerHTML = "";
-      // }
+
       if (!querySnapshot.empty) {
+
         querySnapshot.forEach((doc) => {
           const taskData = doc.data();
           const taskId = doc.id;
-          console.log("Number of blog posts fetched:");
-
 
           const taskCard = document.createElement("div");
           taskCard.classList.add("task-card");
-          taskCard.setAttribute("data-id", doc.id); // Store the document ID to avoid duplicates
+          taskCard.setAttribute("data-id", taskId);
 
           taskCard.innerHTML = `
-             
-      <div class="task-card">
-        <div class="task-card-header">
-            <h3 class="task-title">${taskData.title}</h3>
-            <p class="task-status">Status</p>
-        </div>
-        <div class="task-card-body">
-            <p><strong>Description:</strong> ${taskData.description}</p>
-        </div>
-        <div class="task-card-footer">
-         <button class="btn-edit btn btn-sm btn-warning">Edit</button>
-        <button class="btn-delete">Delete</button>
-        </div>
-    </div>
-              
-            `;
+            <div class="task-card-header">
+              <h3 class="task-title">${taskData.title}</h3>
 
-            taskCard.querySelector('.btn-edit')
-            ?.addEventListener('click', () => editTask(taskId));
+              <!-- Status dropdown -->
+              <div class="status-dropdown">
+                <button class="status-btn">${taskData.status || "Status"}</button>
+                <div class="status-menu">
+                  <div class="status-option" data-status="To Do">To Do</div>
+                  <div class="status-option" data-status="Progress">Pending</div>
+                  <div class="status-option" data-status="Done">Done</div>
+                </div>
+              </div>
 
-            taskCard.querySelector('.btn-delete')
-            .addEventListener('click', () => deleteTask(taskId));
+            </div>
+            <div class="task-card-body">
+              <p><strong>Description:</strong> ${taskData.description}</p>
+            </div>
+            <div class="task-card-footer">
+              <button class="btn-edit btn btn-sm btn-warning">Edit</button>
+              <button class="btn-delete">Delete</button>
+            </div>
+          `;
+
+          // Edit/Delete
+          taskCard.querySelector('.btn-edit')?.addEventListener('click', () => editTask(taskId));
+          taskCard.querySelector('.btn-delete')?.addEventListener('click', () => deleteTask(taskId));
+
+          // Status dropdown click
+          const statusBtn = taskCard.querySelector('.status-btn');
+          const statusMenu = taskCard.querySelector('.status-menu');
+
+          statusBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            // Toggle dropdown
+            statusMenu.classList.toggle('show');
+          });
+
+          // Select option
+          statusMenu.querySelectorAll('.status-option').forEach(option => {
+            option.addEventListener('click', () => {
+              const selectedStatus = option.getAttribute('data-status');
+              updateTaskStatus(taskId, selectedStatus);
+              statusMenu.classList.remove('show'); 
+            });
+          });
+
+          document.addEventListener('click', () => {
+            statusMenu.classList.remove('show');
+          });
 
           taskContainer.appendChild(taskCard);
         });
       } else {
-        console.log("No blog posts found!");
+        console.log("No tasks found!");
       }
-    })
+      hideLoader();
+    });
   } catch (error) {
-    console.log('fetch nhi hua ',error);
-    
+    console.log('fetch nhi hua', error);
   }
+};
 
-
+// Firestore Update Function (already ready)
+async function updateTaskStatus(taskId, newStatus) {
+  try {
+    const taskRef = doc(db, "tasks", taskId);
+    await updateDoc(taskRef, { status: newStatus });
+    console.log("Status updated successfully");
+  } catch (error) {
+    console.error("Error updating status:", error);
+  }
 }
 fetchTask()
 
 // ///------------------------------edit----------------------------------/
 async function editTask(taskId) {
-  // 1) Document reference banao
   const ref = doc(db, "tasks", taskId);
   const snap = await getDoc(ref);
   if (!snap.exists()) {
@@ -130,47 +177,41 @@ async function editTask(taskId) {
   }
   const t = snap.data();
 
-  // 2) Modal fields fill karo
-  document.getElementById('edit-task-id').value          = taskId;
-  document.getElementById('edit-task-title').value       = t.title;
-  document.getElementById('edit-task-status').value      = t.status;
-  document.getElementById('edit-task-description').value = t.description;
+  document.getElementById("edit-task-id").value = taskId;
+  document.getElementById("edit-task-title").value = t.title;
+  document.getElementById("edit-task-status").value = t.status;
+  document.getElementById("edit-task-description").value = t.description;
 
-  // 3) Modal dikhao
-  new bootstrap.Modal(document.getElementById('editTaskModal')).show();
+  new bootstrap.Modal(document.getElementById("editTaskModal")).show();
 }
 window.editTask = editTask;
-document.getElementById('editTaskForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
+document
+  .getElementById("editTaskForm")
+  .addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-  // 1) Hidden field se correct ID le lo
-  const taskId = document.getElementById('edit-task-id').value;
+    const taskId = document.getElementById("edit-task-id").value;
 
-  // 2) Baaki form values lo
-  const title       = document.getElementById('edit-task-title').value;
-  const status      = document.getElementById('edit-task-status').value;
-  const description = document.getElementById('edit-task-description').value;
+    const title = document.getElementById("edit-task-title").value;
+    const status = document.getElementById("edit-task-status").value;
+    const description = document.getElementById("edit-task-description").value;
 
-  try {
-    // 3) Firestore document reference isi taskId se banao
-    const taskRef = doc(db, "tasks", taskId);
-    await updateDoc(taskRef, { title, status, description });
+    try {
+      const taskRef = doc(db, "tasks", taskId);
+      await updateDoc(taskRef, { title, status, description });
 
-    // 4) Modal band karo
-    bootstrap.Modal.getInstance(
-      document.getElementById('editTaskModal')
-    ).hide();
-  } catch (err) {
-    console.error("Error updating task:", err);
-  }
-});
-
+      // modal close
+      bootstrap.Modal.getInstance(
+        document.getElementById("editTaskModal")
+      ).hide();
+    } catch (err) {
+      console.error("Error updating task:", err);
+    }
+  });
 
 // ------- delete task --------//
 async function deleteTask(taskId) {
   try {
-
-    
     await deleteDoc(doc(db, "tasks", taskId));
     console.log("Task deleted:", taskId);
   } catch (err) {
