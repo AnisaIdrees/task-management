@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<!-- Coding by CodingLab | www.codinglabweb.com-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signup Form</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="../style/form.css" />
+    <!-- Boxicons CSS -->
+    <link
+      href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- boxicon cdn -->
+    <link
+      href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <section class="container forms">
+      <!-- Signup Form -->
+      <div class="form signup">
+        <div class="form-content">
+          <header>Signup</header>
+          <form action="#" id="signUp">
+            <div class="field input-field">
+              <i class="bx bx-user input-icon"></i>
+              <input type="text" placeholder="name" class="input" id="name" />
+            </div>
+            <div class="field input-field">
+              <i class="bx bx-envelope input-icon"></i>
+              <input
+                type="email"
+                placeholder="Email"
+                class="input"
+                id="email"
+              />
+            </div>
+            <div class="field input-field">
+              <i class="bx bx-lock input-icon"></i>
+              <input
+                type="password"
+                placeholder="Create password"
+                class="password"
+                id="password"
+              />
+            </div>
+            <div class="field input-field">
+              <input
+                type="password"
+                placeholder="Confirm password"
+                class="password"
+                id="Confirm-password"
+              />
+              <i class="bx bx-hide eye-icon"></i>
+            </div>
+            <p id="messageText"></p>
+            <div class="field button-field">
+              <button id="signUp-btn">Signup</button>
+            </div>
+          </form>
+          <div class="form-link">
+            <span
+              >Already have an account?
+              <a href="./login.html" class="link login-link">Login</a></span
+            >
+          </div>
+        </div>
+        <div class="line"></div>
+
+        <div class="media-options">
+          <a href="#" class="field google">
+            <img
+              src="../images/pngimg.com - google_PNG19635.png"
+              alt="Google"
+              class="google-img"
+            />
+            <span>Sign up with Google</span>
+          </a>
+        </div>
+        <div class="media-options">
+          <a href="#" class="field facebook">
+            <i class="bx bxl-facebook facebook-icon"></i>
+            <span>Login with Facebook</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      const forms = document.querySelector(".forms"),
+        pwShowHide = document.querySelectorAll(".eye-icon"),
+        links = document.querySelectorAll(".link");
+      pwShowHide.forEach((eyeIcon) => {
+        eyeIcon.addEventListener("click", () => {
+          let pwFields =
+            eyeIcon.parentElement.parentElement.querySelectorAll(".password");
+          pwFields.forEach((password) => {
+            if (password.type === "password") {
+              password.type = "text";
+              eyeIcon.classList.replace("bx-hide", "bx-show");
+              return;
+            }
+            password.type = "password";
+            eyeIcon.classList.replace("bx-show", "bx-hide");
+          });
+        });
+      });
+    </script>
+
+    <!-- sweetalert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- JavaScript -->
+    <script src="../js/index.js" type="module"></script>
+  </body>
+</html>
