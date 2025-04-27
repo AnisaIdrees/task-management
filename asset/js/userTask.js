@@ -18,6 +18,8 @@ import {
 
 const createTaks = async (e) => {
   e.preventDefault();
+
+  
   let title = document.getElementById("task-title").value;
   let description = document.getElementById("task-desc").value;
   let assign = document.getElementById("task-assign").value;
@@ -183,6 +185,7 @@ async function editTask(taskId) {
   const snap = await getDoc(ref);
   if (!snap.exists()) {
     console.error("No such task!", id);
+    alert('you are not logged in  , please login first')
     return;
   }
   const t = snap.data();
@@ -216,6 +219,8 @@ document
       ).hide();
     } catch (err) {
       console.error("Error updating task:", err);
+      
+      
     }
   });
 

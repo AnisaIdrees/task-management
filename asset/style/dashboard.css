@@ -343,7 +343,7 @@ body {
   height: var(--uib-size);
   width: var(--uib-size);
   margin: auto;
-  margin-top: 40px;
+  margin-top: 20px;
   visibility: hidden;
 }
 
