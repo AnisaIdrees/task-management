@@ -5,6 +5,7 @@ import {
   getDocs,
   getDoc,
   doc,
+  auth,
   setDoc,
   Timestamp,
   deleteDoc,
@@ -45,7 +46,7 @@ const createTaks = async (e) => {
     window.location.href = "/index.html"; // redirection
   } catch (error) {
     console.error("Error adding task: ", error);
-    alert("Error adding task. Please try again.");
+    alert("not Logged in ");
   }
 };
 
@@ -83,7 +84,6 @@ let fetchTask = async () => {
       taskContainer.innerHTML = "";
 
       if (!querySnapshot.empty) {
-
         querySnapshot.forEach((doc) => {
           const taskData = doc.data();
           const taskId = doc.id;
@@ -92,13 +92,16 @@ let fetchTask = async () => {
           taskCard.classList.add("task-card");
           taskCard.setAttribute("data-id", taskId);
 
+          // Set initial status color based on status
+          let statusColorClass = getStatusColor(taskData.status);
+
           taskCard.innerHTML = `
             <div class="task-card-header">
               <h3 class="task-title">${taskData.title}</h3>
 
               <!-- Status dropdown -->
               <div class="status-dropdown">
-                <button class="status-btn">${taskData.status || "Status"}</button>
+                <button class="status-btn ${statusColorClass}">${taskData.status || "Status"}</button>
                 <div class="status-menu">
                   <div class="status-option" data-status="To Do">To Do</div>
                   <div class="status-option" data-status="Progress">Pending</div>
@@ -112,7 +115,7 @@ let fetchTask = async () => {
             </div>
             <div class="task-card-footer">
               <button class="btn-edit btn btn-sm btn-warning">Edit</button>
-              <button class="btn-delete">Delete</button>
+              <button class="btn-delete btn btn-sm btn-danger">Delete</button>
             </div>
           `;
 
@@ -126,16 +129,20 @@ let fetchTask = async () => {
 
           statusBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            // Toggle dropdown
             statusMenu.classList.toggle('show');
           });
 
           // Select option
           statusMenu.querySelectorAll('.status-option').forEach(option => {
-            option.addEventListener('click', () => {
+            option.addEventListener('click', async () => {
               const selectedStatus = option.getAttribute('data-status');
-              updateTaskStatus(taskId, selectedStatus);
-              statusMenu.classList.remove('show'); 
+              await updateTaskStatus(taskId, selectedStatus);
+
+              // Update UI without reloading
+              statusBtn.textContent = selectedStatus;
+              statusBtn.className = `status-btn ${getStatusColor(selectedStatus)}`;
+
+              statusMenu.classList.remove('show');
             });
           });
 
@@ -152,20 +159,23 @@ let fetchTask = async () => {
     });
   } catch (error) {
     console.log('fetch nhi hua', error);
+    hideLoader(); // important
   }
 };
 
-// Firestore Update Function (already ready)
-async function updateTaskStatus(taskId, newStatus) {
-  try {
-    const taskRef = doc(db, "tasks", taskId);
-    await updateDoc(taskRef, { status: newStatus });
-    console.log("Status updated successfully");
-  } catch (error) {
-    console.error("Error updating status:", error);
+fetchTask();
+function getStatusColor(status) {
+  switch (status) {
+    case "To Do":
+      return "status-todo"; // blue
+    case "Progress":
+      return "status-pending"; // yellow
+    case "Done":
+      return "status-done"; // green
+    default:
+      return "status-default"; // gray
   }
 }
-fetchTask()
 
 // ///------------------------------edit----------------------------------/
 async function editTask(taskId) {
@@ -186,8 +196,8 @@ async function editTask(taskId) {
 }
 window.editTask = editTask;
 document
-  .getElementById("editTaskForm")
-  .addEventListener("submit", async (e) => {
+  ?.getElementById("editTaskForm")
+  ?.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const taskId = document.getElementById("edit-task-id").value;
