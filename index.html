@@ -47,15 +47,43 @@
             <button class="btn-delete">Delete</button>
         </div>
     </div> -->
-    
-
-
-
-
-  
-  
       </div> 
  
+
+
+      <!-- Edit Task Modal -->
+<div class="modal fade" id="editTaskModal" tabindex="-1" aria-labelledby="editTaskModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content custom-modal">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editTaskModalLabel">Edit Task</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editTaskForm">
+          <input type="hidden" id="edit-task-id"> <!-- hidden field for task id -->
+          <div class="mb-3">
+            <label for="edit-task-title" class="form-label">Title</label>
+            <input type="text" class="form-control custom-input" id="edit-task-title" required>
+          </div>
+          <div class="mb-3">
+            <label for="edit-task-status" class="form-label">Status</label>
+            <input type="text" class="form-control custom-input" id="edit-task-status" required>
+          </div>
+          <div class="mb-3">
+            <label for="edit-task-description" class="form-label">Description</label>
+            <textarea class="form-control custom-input" id="edit-task-description" rows="3" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary custom-btn">Update Task</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add this inside <style> tag ya external CSS file me -->
+
+
     <!-- Toggle Button for Small Screens -->
     <button class="btn btn-primary d-md-none" id="sidebar-toggle" style="position: absolute; top: 15px; left: 15px; z-index: 1000;">
       <i class="fas fa-bars"></i>
@@ -73,7 +101,9 @@
 
 
 
-
+<!-- modal -->
+ 
+ <!-- modal close -->
 
 
 

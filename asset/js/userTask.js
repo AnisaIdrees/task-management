@@ -3,11 +3,12 @@ import {
   collection,
   addDoc,
   getDocs,
+  getDoc,
   doc,
   setDoc,
   Timestamp,
   deleteDoc,
-  onSnapshot,
+  onSnapshot,updateDoc,
   query,
 } from "./firebaseConfig.js";
 
@@ -64,6 +65,7 @@ let fetchTask = async ()=>{
       collection(db, "tasks"),
     );
     onSnapshot(tasksQuery, (querySnapshot) => {
+      taskContainer.innerHTML = "";
       // if (isFirstTimeLoad) {
       //   taskContainer.innerHTML = "";
       // }
@@ -89,12 +91,18 @@ let fetchTask = async ()=>{
             <p><strong>Description:</strong> ${taskData.description}</p>
         </div>
         <div class="task-card-footer">
-            <button class="btn-edit">Edit</button>
-            <button class="btn-delete">Delete</button>
+         <button class="btn-edit btn btn-sm btn-warning">Edit</button>
+        <button class="btn-delete">Delete</button>
         </div>
     </div>
               
             `;
+
+            taskCard.querySelector('.btn-edit')
+            ?.addEventListener('click', () => editTask(taskId));
+
+            taskCard.querySelector('.btn-delete')
+            .addEventListener('click', () => deleteTask(taskId));
 
           taskContainer.appendChild(taskCard);
         });
@@ -110,3 +118,77 @@ let fetchTask = async ()=>{
 
 }
 fetchTask()
+
+// ///------------------------------edit----------------------------------/
+async function editTask(taskId) {
+  // 1) Document reference banao
+  const ref = doc(db, "tasks", taskId);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) {
+    console.error("No such task!", id);
+    return;
+  }
+  const t = snap.data();
+
+  // 2) Modal fields fill karo
+  document.getElementById('edit-task-id').value          = taskId;
+  document.getElementById('edit-task-title').value       = t.title;
+  document.getElementById('edit-task-status').value      = t.status;
+  document.getElementById('edit-task-description').value = t.description;
+
+  // 3) Modal dikhao
+  new bootstrap.Modal(document.getElementById('editTaskModal')).show();
+}
+window.editTask = editTask;
+document.getElementById('editTaskForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  // 1) Hidden field se correct ID le lo
+  const taskId = document.getElementById('edit-task-id').value;
+
+  // 2) Baaki form values lo
+  const title       = document.getElementById('edit-task-title').value;
+  const status      = document.getElementById('edit-task-status').value;
+  const description = document.getElementById('edit-task-description').value;
+
+  try {
+    // 3) Firestore document reference isi taskId se banao
+    const taskRef = doc(db, "tasks", taskId);
+    await updateDoc(taskRef, { title, status, description });
+
+    // 4) Modal band karo
+    bootstrap.Modal.getInstance(
+      document.getElementById('editTaskModal')
+    ).hide();
+  } catch (err) {
+    console.error("Error updating task:", err);
+  }
+});
+
+
+// ------- delete task --------//
+async function deleteTask(taskId) {
+  // SweetAlert se confirm karo
+  const confirmDelete = await Swal.fire({
+    title: 'Kya aap sure hain?',
+    text: "Ye task permanently delete ho jayega!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#bc5dcf',
+    cancelButtonColor: '#6c757d',
+    confirmButtonText: 'Haan, delete karo',
+    cancelButtonText: 'Nahi, cancel karo'
+  });
+
+  if (confirmDelete.isConfirmed) {
+    try {
+      // Firestore se task delete karna
+      await deleteDoc(doc(db, "tasks", taskId));
+      Swal.fire('Deleted!', 'Task successfully delete ho gaya.', 'success');
+    } catch (err) {
+      Swal.fire('Error!', 'Task delete nahi ho saka.', 'error');
+    }
+  }
+}
+
+// Ye function delete button ke saath call ho sakta hai

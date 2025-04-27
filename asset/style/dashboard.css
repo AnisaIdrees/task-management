@@ -221,3 +221,40 @@ body {
     align-items: center;
   }
 }
+
+/* Modal Background Color */
+.custom-modal {
+  background-color: #f8e8fc;
+  border-radius: 12px;
+  border: 2px solid #bc5dcf;
+}
+
+/* Modal Header Text */
+.custom-modal .modal-title {
+  color: #bc5dcf;
+  font-weight: bold;
+}
+
+/* Input and Textarea Fields */
+.custom-input {
+  border: 2px solid #bc5dcf;
+  border-radius: 8px;
+}
+
+.custom-input:focus {
+  border-color: #a64cb3;
+  box-shadow: 0 0 5px #bc5dcf;
+}
+
+/* Update Button */
+.custom-btn {
+  background-color: #bc5dcf;
+  border-color: #bc5dcf;
+  font-weight: bold;
+  border-radius: 8px;
+}
+
+.custom-btn:hover {
+  background-color: #a64cb3;
+  border-color: #a64cb3;
+}
