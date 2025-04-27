@@ -1,230 +1,223 @@
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-  }
+  font-family: "Arial", sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+}
 
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 250px;
+  background-color: rgb(147, 42, 147);
+  color: #fff;
+  padding-top: 50px;
+  transition: all 0.3s ease;
+  z-index: 999;
+}
+
+.sidebar ul {
+  list-style: none;
+}
+
+.sidebar li {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+}
+
+.sidebar a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.sidebar a:hover {
+  background-color: purple;
+}
+
+.sidebar i {
+  margin-right: 10px; /* Space between the icon and the text */
+}
+
+/* Sidebar Hidden by default on small screens */
+@media (max-width: 768px) {
   .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 250px;
-    background-color:rgb(147, 42, 147);
-    color: #fff;
-    padding-top: 50px;
-    transition: all 0.3s ease;
-    z-index: 999;
+    left: -250px; /* Hidden sidebar by default */
   }
 
-  .sidebar ul {
-    list-style: none;
+  .sidebar.show {
+    left: 0; /* Sidebar shows on toggle */
   }
+}
 
-  .sidebar li {
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    padding-left: 15px;
-  }
+/* Main Content */
+.main-content {
+  margin-left: 250px;
+  padding: 30px;
+  min-height: 100vh;
+  transition: all 0.3s ease;
+  padding-top: 60px; /* Space for topbar */
+  border-radius: 20px;
+}
 
-  .sidebar a {
-    color: white;
-    text-decoration: none;
-    font-size: 18px;
-    display: flex;
-    align-items: center;
-    padding: 12px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-    width: 100%;
-  }
-
-  .sidebar a:hover {
-    background-color:purple;
-  }
-
-  .sidebar i {
-    margin-right: 10px; /* Space between the icon and the text */
-  }
-
-  /* Sidebar Hidden by default on small screens */
-  @media (max-width: 768px) {
-    .sidebar {
-      left: -250px; /* Hidden sidebar by default */
-    }
-
-    .sidebar.show {
-      left: 0; /* Sidebar shows on toggle */
-    }
-  }
-
-  /* Main Content */
+@media (max-width: 768px) {
   .main-content {
-    margin-left: 250px;
-    padding: 30px;
-    min-height: 100vh;
-    transition: all 0.3s ease;
-    padding-top: 60px; /* Space for topbar */
+    margin-left: 0;
+    padding-top: 70px; /* Adjust padding for mobile */
   }
+}
 
-  @media (max-width: 768px) {
-    .main-content {
-      margin-left: 0;
-      padding-top: 70px; /* Adjust padding for mobile */
-    }
-  }
+/* Topbar Styling */
+.topbar {
+  background-image: url(https://img.freepik.com/premium-photo/purple-bokeh-background-seasonal-holidays-event-celebrations_7954-40088.jpg?uid=R155654722&ga=GA1.1.1158760876.1738399556&semt=ais_hybrid&w=740);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  border-radius: 30px;
+  height: 40vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 
-  /* Topbar Styling */
-  .topbar {
-    background-color:plum;
-    color: white;
-    padding: 20px;
-    text-align: center;
-    border-radius: 5px;
-    height: 40vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+}
 
-  .topbar h1 {
-    font-size: 24px;
-  }
-  /* Topbar Styling */
-  .topbar {
-    background-color:#7336a872;
-    color: white;
-    padding: 20px;
-    text-align: center;
-    border-radius: 5px;
-  }
+.topbar h1 {
+  font-size: 24px;
+}
+/* Topbar Styling */
+.topbar {
+  background-color: #7336a872;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  border-radius: 5px;
+}
 
-  .topbar h1 {
-    font-size: 24px;
-  }
- 
-  .topbar a{
-    border: none;
-    padding: 30px;
-    border-radius: 50%;
-    background-color: purple;
+.topbar h1 {
+  font-size: 24px;
+}
 
-  }
-  .topbar a i {
-    font-size: 30px;
-    color: rgb(238, 210, 238);
+.topbar a {
+  border: none;
+  padding: 30px;
+  border-radius: 50%;
+  background-color: purple;
+}
+.topbar a i {
+  font-size: 30px;
+  color: rgb(238, 210, 238);
+}
 
-  }
-
-  /* /////////// card */
-  /* #task-container {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f8f9fa;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    height: 100vh;
-} */
-
-#tasks-container {
+.task-container {
   margin-top: 30px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content:center;
+  align-items: center;
+  gap: 20px;
 }
 
 .task-card {
-    width: 300px;
-    border-radius: 10px;
-    background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease-in-out;
-    overflow: hidden;
-    border: 1px solid #ddd;
+  cursor: pointer;
+  width: 300px;
+  border-radius: 15px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+  overflow: hidden;
+  border: 1px solid #ddd;
 }
 
 .task-card:hover {
-    transform: translateY(-10px);
+  transform: translateY(-10px);
 }
 
 .task-card-header {
-    background-color: #7336a8; /* Purple color */
-    color: #fff;
-    padding: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 2px solid  #7336a8; /* Darker purple for border */
+  background-color: #bc5dcf; /* Purple color */
+  color: #fff;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #bc5dcf; /* Darker purple for border */
 }
 
 .task-title {
-    font-size: 20px;
-    font-weight: bold;
-    margin: 0;
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0;
 }
 
 .task-status {
-    font-size: 14px;
-    background-color: #28a745;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 4px;
+  font-size: 14px;
+  background-color: #28a745;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
 }
 
 .task-card-body {
-    padding: 20px;
-    font-size: 16px;
-    color: #555;
+  padding: 20px;
+  font-size: 16px;
+  color: #555;
 }
 
 .task-card-body p {
-    margin: 10px 0;
+  margin: 10px 0;
 }
 
 .task-card-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-    border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-top: 1px solid #ddd;
 }
 
 .btn-edit,
 .btn-delete {
-    padding: 8px 15px;
-    font-size: 14px;
-    border: none;
-    cursor: pointer;
-    border-radius: 20px;
-    transition: all 0.3s;
+  padding: 8px 15px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  border-radius: 20px;
+  transition: all 0.3s;
 }
 
 .btn-edit {
-    background-color: #7336a8; /* Purple color */
-    color: white;
+  background-color: #bc5dcf; /* Purple color */
+  color: white;
 }
 
 .btn-edit:hover {
-    background-color: #5a2a8b; /* Darker purple */
+  background-color: #bc5dcf; /* Darker purple */
 }
 
 .btn-delete {
-    background-color: #dc3545;
-    color: white;
+  background-color: #dc3545;
+  color: white;
 }
 
 .btn-delete:hover {
-    background-color: #c82333;
+  background-color: #c82333;
 }
 
 @media (max-width: 768px) {
-    #tasks-container {
-        flex-direction: column;
-        align-items: center;
-    }
+  #tasks-container {
+    flex-direction: column;
+    align-items: center;
+  }
 }
-
