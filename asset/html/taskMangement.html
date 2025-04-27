@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Management Form</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Custom styles */
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f7fc;
+      color: #333;
+    }
+
+    .container {
+      margin-top: 50px;
+    }
+
+    h2, h3 {
+      color: #2C3E50;
+    }
+
+    /* Styling for task form */
+    .task-form {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .task-form .form-label {
+      color: #2C3E50;
+    }
+
+    .task-form input, .task-form textarea {
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+
+    .task-form button {
+      background-color: #2980B9;
+      color: white;
+      font-size: 16px;
+      border-radius: 5px;
+      padding: 10px 20px;
+      border: none;
+      width: 100%;
+    }
+
+    .task-form button:hover {
+      background-color: #3498db;
+      cursor: pointer;
+    }
+
+    /* Task Card Styling */
+    .task-card {
+      background-color: #ffffff;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .task-card h4 {
+      color: #2980B9;
+      font-size: 20px;
+    }
+
+    .task-card p {
+      color: #7f8c8d;
+      font-size: 16px;
+    }
+
+    .task-card .task-btn {
+      margin-top: 10px;
+    }
+
+    .task-card button {
+      border-radius: 5px;
+      padding: 6px 12px;
+    }
+
+    .task-card .btn-warning {
+      background-color: #f39c12;
+    }
+
+    .task-card .btn-warning:hover {
+      background-color: #e67e22;
+    }
+
+    .task-card .btn-danger {
+      background-color: #e74c3c;
+    }
+
+    .task-card .btn-danger:hover {
+      background-color: #c0392b;
+    }
+
+    
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #tasks-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .task-card {
+            width: 300px;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+            overflow: hidden;
+            border: 1px solid #ddd;
+        }
+
+        .task-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .task-card-header {
+            background-color: #6f42c1; /* Purple color */
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #5a2a8b; /* Darker purple for border */
+        }
+
+        .task-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .task-status {
+            font-size: 14px;
+            background-color: #28a745;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .task-card-body {
+            padding: 20px;
+            font-size: 16px;
+            color: #555;
+        }
+
+        .task-card-body p {
+            margin: 10px 0;
+        }
+
+        .task-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-top: 1px solid #ddd;
+        }
+
+        .btn-edit,
+        .btn-delete {
+            padding: 8px 15px;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+
+        .btn-edit {
+            background-color: #6f42c1; /* Purple color */
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background-color: #5a2a8b; /* Darker purple */
+        }
+
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background-color: #c82333;
+        }
+
+        @media (max-width: 768px) {
+            #tasks-container {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Task Form -->
+    <div class="task-form">
+      <h2>Create a New Task</h2>
+      <form id="task-form">
+        <div class="mb-3">
+          <label for="task-title" class="form-label">Task Title</label>
+          <input type="text" class="form-control" id="task-title" placeholder="Enter task title" required>
+        </div>
+        <div class="mb-3">
+          <label for="task-desc" class="form-label">Task Description</label>
+          <textarea class="form-control" id="task-desc" rows="3" placeholder="Enter task description" required></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="task-assign" class="form-label">Assign To</label>
+          <input type="text" class="form-control" id="task-assign" placeholder="Assign to a person" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Task</button>
+      </form>
+    </div>
+
+
+
+
+  <!-- Bootstrap JS (for responsiveness and functionality) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/firebaseConfig.js"type="module"></script>
+  <script src="../js/userTask.js"type="module"></script>
+  <script src="../js/index.js"type="module"></script>
+  </script>
+</body>
+</html>
